@@ -171,9 +171,9 @@ $$
 
 | 条件 | 得分 |
 |------|------|
-| $$\vertIR\vert > 0.75$$ | +3 |
-| $$\vertIR\vert > 0.5$$ | +2 |
-| $$\vertIR\vert > 0.3$$ | +1 |
+| $$\vert IR \vert > 0.75$$ | +3 |
+| $$\vert IR \vert > 0.5$$ | +2 |
+| $$\vert IR \vert > 0.3$$ | +1 |
 | t-stat > 3.0 | +2 |
 | t-stat > 2.0 | +1 |
 | Win Rate > 58% | +2 |

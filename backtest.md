@@ -201,8 +201,8 @@ $$
 
 $$
 \begin{aligned}
-c_{\text{buy}} &= c_{\text{comm}} + c_{\text{slip}} = 0.13\% \\
-c_{\text{sell}} &= c_{\text{comm}} + c_{\text{slip}} + c_{\text{stamp}} = 0.23\% \\
+c_{\text{buy}} &= c_{\text{comm}} + c_{\text{slip}} = 0.13\% \\\\
+c_{\text{sell}} &= c_{\text{comm}} + c_{\text{slip}} + c_{\text{stamp}} = 0.23\% \\\\
 c_{\text{roundtrip}} &= c_{\text{buy}} + c_{\text{sell}} = 0.36\%
 \end{aligned}
 $$

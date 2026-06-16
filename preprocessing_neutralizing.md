@@ -118,7 +118,7 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 ## 4. 缺失值填充
 
-设 $R$ 为缺失指示矩阵（$$R_{ij} = 1$$ 若 $$x_{ij}$$ 缺失），$$X_{obs}$$ 为观测值，$$X_{mis}$$ 为缺失值：
+设 $R$ 为缺失指示矩阵（$R_{ij} = 1$ 若 $x_{ij}$ 缺失），$X_{obs}$ 为观测值，$X_{mis}$ 为缺失值：
 
 - **MCAR** (Missing Completely At Random)：$$P(R \mid X_{obs}, X_{mis}) = P(R)$$
 - **MAR** (Missing At Random)：$$P(R \mid X_{obs}, X_{mis}) = P(R \mid X_{obs})$$
