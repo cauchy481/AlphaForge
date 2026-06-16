@@ -158,12 +158,10 @@ $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
 
 我们实现了两种综合评分 metrics
 1. 综合加权
-$$
-\text{Score} = 0.40 × IC\_IR      
-         + 0.20 × IC\_Mean     
-         + 0.20 × Monotonicity 
-         + 0.20 × (1 - Turnover)  
-$$
+
+```
+Score = 0.40 × IC_IR + 0.20 × IC_Mean + 0.20 × Monotonicity + 0.20 × (1 − Turnover)
+```
 
 2. 等级赋分
 

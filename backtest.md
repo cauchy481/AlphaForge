@@ -186,7 +186,7 @@ $$
 | 指标 | 计算公式 |
 |------|---------|
 | **换手率** | $$\displaystyle Turnover = \frac{N_{buy} + N_{sell}}{2 \times N_{hold}} \in [0,1]$$ |
-| **交易成本** | $$\displaystyle Cost = \sum_{k}\left(c_{comm} + c_{stamp}\cdot\mathbb{1}_{sell} + c_{slip}\right)\cdot V_k$$ |
+| **交易成本** | $$\displaystyle Cost = \sum_{k}\left(c_{comm} + c_{stamp}\cdot 1_{sell} + c_{slip}\right)\cdot V_k$$ |
 | **交易笔数** | $$\displaystyle N_{trade}$$ |
 
 ### 成本模型
@@ -200,11 +200,15 @@ $$
 其中各方向成本费率：
 
 $$
-\begin{aligned}
-c_{\text{buy}} &= c_{\text{comm}} + c_{\text{slip}} = 0.13\% \\\\
-c_{\text{sell}} &= c_{\text{comm}} + c_{\text{slip}} + c_{\text{stamp}} = 0.23\% \\\\
-c_{\text{roundtrip}} &= c_{\text{buy}} + c_{\text{sell}} = 0.36\%
-\end{aligned}
+c_{buy} = c_{comm} + c_{slip} = 0.13\%
+$$
+
+$$
+c_{sell} = c_{comm} + c_{slip} + c_{stamp} = 0.23\%
+$$
+
+$$
+c_{roundtrip} = c_{buy} + c_{sell} = 0.36\%
 $$
 
 

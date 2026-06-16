@@ -118,11 +118,11 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 ## 4. 缺失值填充
 
-设 $R$ 为缺失指示矩阵（$R_{ij} = 1$ 若 $x_{ij}$ 缺失），$X_{obs}$ 为观测值，$X_{mis}$ 为缺失值：
+设 $R$ 为缺失指示矩阵（$R_{ij}=1$ 若 $x_{ij}$ 缺失），$X_{obs}$ 为观测值，$X_{mis}$ 为缺失值：
 
-- **MCAR** (Missing Completely At Random)：$$P(R \mid X_{obs}, X_{mis}) = P(R)$$
-- **MAR** (Missing At Random)：$$P(R \mid X_{obs}, X_{mis}) = P(R \mid X_{obs})$$
-- **MNAR** (Missing Not At Random)：$$P(R \mid X_{obs}, X_{mis}) \neq P(R \mid X_{obs})$$
+- **MCAR**: $P(R \mid X_{obs}, X_{mis}) = P(R)$
+- **MAR**: $P(R \mid X_{obs}, X_{mis}) = P(R \mid X_{obs})$
+- **MNAR**: $P(R \mid X_{obs}, X_{mis}) \neq P(R \mid X_{obs})$
 
 该项目暂时不考虑 MNAR
 
@@ -254,9 +254,12 @@ $$f = \alpha + \sum_{j=1}^{10} \beta_j \cdot BarraStyle_j + \sum_{k=1}^{K-1} \ga
 
 由正交性条件，截距项会导出 $$\sum\epsilon_i=0$$, 因此可以在一开始就对 $f$ 和 $s$ 做中心化处理
 
-下面我们考虑只做市值中性化，不分行业，那么就是求解
-：
-$$ s \perp f_{neutral} = f - \hat{\beta} \cdot s  $$
+下面我们考虑只做市值中性化，不分行业，那么就是求解：
+
+$$
+s \perp f_{neutral} = f - \hat{\beta} \cdot s
+$$
+
 得到 $\hat{\beta} = \frac{Cov(f, s)}{Var(s)}$
 
 
