@@ -1,0 +1,43 @@
+
+tushare:
+  token: ""  # your tushare token
+
+data:
+  cache_dir: "./data_cache"           # 本地数据缓存目录
+  daily_subdir: "daily"               # 日线数据子目录
+  fundamental_subdir: "fundamental"   # 基本面数据子目录
+  industry_subdir: "industry"         # 行业分类数据子目录
+
+backtest:
+  initial_capital: 1000000.0
+  commission_rate: 0.0003    # 万三佣金
+  slippage_rate: 0.001       # 千一滑点
+  stamp_duty: 0.001          # 千一印花税（卖出）
+  risk_free_rate: 0.03       # 3% 无风险利率
+
+preprocessing:
+  winsorize_method: "mad"    # mad / sigma / percentile
+  winsorize_n: 5.0           # MAD倍数 或 Sigma倍数
+  fill_method: "industry_median"
+  standardize_method: "zscore"
+  neutralize_method: "industry_size"  # none / industry / size / industry_size / barra
+
+universe:
+  min_list_days: 60          # 上市最少天数
+  min_daily_amount: 5000000  # 最小日均成交额（元）
+  exclude_st: true           # 剔除ST
+
+evaluation:
+  ic_method: "spearman"      # spearman / pearson
+  n_groups: 10               # 分组回测组数
+
+composer:
+  lookback: 60               # 滚动窗口天数
+  min_history: 40            # 最小历史天数
+  method: "ic_ir"            # equal / ic / ic_ir / ridge / lasso
+
+backtest_strategy:
+  top_n: 50                  # 持仓股票数
+  rebalance_freq: 5          # 调仓频率（交易日）
+  enable_cost: true
+  calculate_ic: true
