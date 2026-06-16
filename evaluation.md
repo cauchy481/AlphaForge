@@ -63,11 +63,11 @@ $$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
 
 | 指标 | 公式 | 
 |------|------|
-| **IC Mean** | $\bar{\text{IC}} = \frac{1}{T}\sum \text{IC}_t$ | 
-| **IC Std** | $\sigma_{\text{IC}} = \sqrt{\frac{1}{T}\sum (\text{IC}_t - \bar{\text{IC}})^2}$ | 
-| **IC IR** | $\text{IR} = \bar{\text{IC}} / \sigma_{\text{IC}}$ | 
-| **IC Win Rate** | $\frac{\#\{\text{IC}_t > 0\}}{T}$ | 
-| **IC t-stat** | $t = \bar{\text{IC}} / (\sigma_{\text{IC}} / \sqrt{T})$ | 
+| **IC Mean** | $$\bar{\mathrm{IC}} = \frac{1}{T}\sum \mathrm{IC}_t$$ | 
+| **IC Std** | $$\sigma_{\mathrm{IC}} = \sqrt{\frac{1}{T}\sum (\mathrm{IC}_t - \bar{\mathrm{IC}})^2}$$ | 
+| **IC IR** | $$\mathrm{IR} = \bar{\mathrm{IC}} / \sigma_{\mathrm{IC}}$$ | 
+| **IC Win Rate** | $$\frac{\#\{\mathrm{IC}_t > 0\}}{T}$$ | 
+| **IC t-stat** | $$t = \bar{\mathrm{IC}} / (\sigma_{\mathrm{IC}} / \sqrt{T})$$ | 
 
 
 注意：IC t-stat 假设 IC 序列是i.i.d.的，但数据通常不满足此假设，因此 $t$ 检验只做参考
@@ -111,7 +111,7 @@ spread = long_short_spread(group_ret)
 
 计算组号与组收益的 Spearman 秩相关：
 
-$$\text{Monotonicity} = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_2, \ldots, \bar{r}_N\}\right)$$
+$$\mathrm{Monotonicity} = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_2, \ldots, \bar{r}_N\}\right)$$
 
 
 
@@ -124,7 +124,7 @@ $$\text{Monotonicity} = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_
 
 $$\text{Rank Autocorr}_t = \rho_s\left(\mathbf{f}_{t-1},\; \mathbf{f}_t\right)$$
 
-$$\text{Turnover} \approx 1 - \text{Rank Autocorr}$$
+$$\mathrm{Turnover} \approx 1 - \text{Rank Autocorr}$$
 
 
 
@@ -159,10 +159,10 @@ $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
 我们实现了两种综合评分 metrics
 1. 综合加权
 $$
-\text{Score} = 0.40 × \text{IC\_IR}      
-         + 0.20 × \text{IC\_Mean}     
-         + 0.20 × \text{Monotonicity} 
-         + 0.20 × (1 - \text{Turnover})  
+\text{Score} = 0.40 × \mathrm{IC\_IR}      
+         + 0.20 × \mathrm{IC\_Mean}     
+         + 0.20 × \mathrm{Monotonicity} 
+         + 0.20 × (1 - \mathrm{Turnover})  
 $$
 
 2. 等级赋分
@@ -171,9 +171,9 @@ $$
 
 | 条件 | 得分 |
 |------|------|
-| $\vert\text{IR}\vert > 0.75$ | +3 |
-| $\vert\text{IR}\vert > 0.5$ | +2 |
-| $\vert\text{IR}\vert > 0.3$ | +1 |
+| $$\vert\mathrm{IR}\vert > 0.75$$ | +3 |
+| $$\vert\mathrm{IR}\vert > 0.5$$ | +2 |
+| $$\vert\mathrm{IR}\vert > 0.3$$ | +1 |
 | t-stat > 3.0 | +2 |
 | t-stat > 2.0 | +1 |
 | Win Rate > 58% | +2 |
@@ -186,7 +186,7 @@ $$
 因子表现不是恒定不变的, 因此我们滚动监控 IC/IR 的信号，在因子失效期暂时停用
 
 
-$$\text{FactorOn}_t = \begin{cases} 1 & \text{Roll\_Mean}_t > 0 \;\text{and}\; \text{Roll\_IR}_t > \theta \\ 0 & \text{otherwise} \end{cases}$$
+$$\text{FactorOn}_t = \begin{cases} 1 & \mathrm{Roll\_Mean}_t > 0 \;\text{and}\; \mathrm{Roll\_IR}_t > \theta \\ 0 & \text{otherwise} \end{cases}$$
 
 关键注意两点：严禁引入未来信息；阈值 $\theta$ 需要在样本外验证
 

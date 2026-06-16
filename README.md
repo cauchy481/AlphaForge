@@ -110,7 +110,7 @@ alphaforge/
 
 ## 2. 系统架构
 <div align="center">
-  <img src="系统架构.png" width="430" height="400" />
+  <img src="系统架构.png" width="350" height="400" />
 </div>
 
 
