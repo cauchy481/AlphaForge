@@ -216,7 +216,7 @@ $$\mathrm{Var}(\mathbf{f}) = \mathrm{Var}(\mathbf{X}\hat{\boldsymbol{\beta}}) + 
 
 行业分类为 $K$ 个行业，我们引入 $K-1$ 个哑变量，基准行业的哑变量为全0：
 
-$$\mathbf{I}_{k}(i) = \begin{cases} 1 & \text{股票 i 属于行业 k} \\ 0 & \text{其他} \end{cases}, \quad k = 1, \ldots, K-1$$
+$$\mathbf{I}_{k}(i) = \begin{cases} 1 & \text{股票 i 属于行业 k} \\\\ 0 & \text{其他} \end{cases}, \quad k = 1, \ldots, K-1$$
 
 使用对数市值作为连续协变量：
 

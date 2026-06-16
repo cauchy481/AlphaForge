@@ -319,8 +319,3 @@ contrib = factor_contribution(weights, factor_gaps)
 result = brinson_attribution(portfolio_return, benchmark_return, contrib)
 ```
 
-
-
-<p align="center">
-  <i>Built by Cuachy1001</i>
-</p>

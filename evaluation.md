@@ -186,7 +186,7 @@ $$
 因子表现不是恒定不变的, 因此我们滚动监控 IC/IR 的信号，在因子失效期暂时停用
 
 
-$$\text{FactorOn}_t = \begin{cases} 1 & \mathrm{Roll\_Mean}_t > 0 \;\text{and}\; \mathrm{Roll\_IR}_t > \theta \\ 0 & \text{otherwise} \end{cases}$$
+$$\text{FactorOn}_t = \begin{cases} 1 & \mathrm{Roll\_Mean}_t > 0 \;\text{and}\; \mathrm{Roll\_IR}_t > \theta \\\\ 0 & \text{otherwise} \end{cases}$$
 
 关键注意两点：严禁引入未来信息；阈值 $\theta$ 需要在样本外验证
 
