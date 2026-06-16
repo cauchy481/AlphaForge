@@ -49,9 +49,9 @@ from core.evaluation import (
 
 我们使用 **Information Coefficient (IC)** 作为基本指标
 
-设 $$f_t \in \mathbb{R}^n$$ 为 $t$ 日 $n$ 只股票的因子值向量，$$r\sb{t+1} \in \mathbb{R}^n$$ 为 $t \to t+1$ 的 forward return：
+设 $f_t \in \mathbb{R}^n$ 为 $t$ 日 $n$ 只股票的因子值向量，$r_{t+1} \in \mathbb{R}^n$ 为 $t \to t+1$ 的 forward return：
 
-$$\text{IC}_t = \text{Corr}\left(f_t,\; r\sb{t+1}\right)$$
+$$\text{IC}_t = \text{Corr}\left(f_t,\; r_{t+1}\right)$$
 
 
 实现层面我们使用 **Rank IC** 为主， 同时避免未来函数
@@ -64,10 +64,10 @@ $$\text{IC}_t = \text{Corr}\left(f_t,\; r\sb{t+1}\right)$$
 | 指标 | 公式 | 
 |------|------|
 | **IC Mean** | $$\bar{IC} = \frac{1}{T}\sum IC_t$$ | 
-| **IC Std** | $$\sigma\sb{IC} = \sqrt{\frac{1}{T}\sum (IC_t - \bar{IC})^2}$$ | 
-| **IC IR** | $$IR = \bar{IC} / \sigma\sb{IC}$$ | 
-| **IC Win Rate** | $$\frac{N\sb{IC_t > 0}}{T}$$ | 
-| **IC t-stat** | $$t = \bar{IC} / (\sigma\sb{IC} / \sqrt{T})$$ | 
+| **IC Std** | $$\sigma_{IC} = \sqrt{\frac{1}{T}\sum (IC_t - \bar{IC})^2}$$ | 
+| **IC IR** | $$IR = \bar{IC} / \sigma_{IC}$$ | 
+| **IC Win Rate** | $$\frac{N_{IC_t > 0}}{T}$$ | 
+| **IC t-stat** | $$t = \bar{IC} / (\sigma_{IC} / \sqrt{T})$$ | 
 
 
 注意：IC t-stat 假设 IC 序列是i.i.d.的，但数据通常不满足此假设，因此 $t$ 检验只做参考
@@ -78,9 +78,9 @@ $$\text{IC}_t = \text{Corr}\left(f_t,\; r\sb{t+1}\right)$$
 
 IC 衰减衡量因子的预测力随持有期延长的变化：
 
-$$\text{IC Decay}(h) = \text{Corr}\left(f_t,\; r\sb{t \to t+h}\right), \quad h = 1, 5, 10, 20, \ldots$$
+$$\text{IC Decay}(h) = \text{Corr}\left(f_t,\; r_{t \to t+h}\right), \quad h = 1, 5, 10, 20, \ldots$$
 
-其中 $$r\sb{t \to t+h}$$ 为 $h$ 日 forward return
+其中 $$r_{t \to t+h}$$ 为 $h$ 日 forward return
 
 IC 衰减决定调仓频率，进而影响成本和容量
 
@@ -122,7 +122,7 @@ $$Monotonicity = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_2, \ldo
 ### 换手率（Turnover）
 通过相邻两日因子值的**秩自相关**（Rank Autocorrelation）来估计：
 
-$$\text{Rank Autocorr}_t = \rho_s\left(f\sb{t-1},\; f_t\right)$$
+$$\text{Rank Autocorr}_t = \rho_s\left(f_{t-1},\; f_t\right)$$
 
 $$Turnover \approx 1 - \text{Rank Autocorr}$$
 
