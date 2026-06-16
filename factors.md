@@ -123,7 +123,7 @@ $$\text{VolAdjMom}_{20d}(t, i) = \frac{\text{Momentum}_{20d}(t, i)}{\sigma_{20d}
 
 $$\sigma_{20d}(t, i) = \sqrt{\frac{1}{19}\sum_{k=t-19}^{t} \left(r_k - \bar{r}\right)^2}$$
 
-$r_k = \frac{P_k - P_{k-1}}{P_{k-1}}$ 为日收益率
+$$r_k = \frac{P_k - P_{k-1}}{P_{k-1}}$$ 为日收益率
 
 这是因为原始动量因子受波动率影响大，而除以波动率相当于做 Studentization
 
@@ -153,7 +153,7 @@ $$\text{Reversal}_{5d}(t, i) = -\text{Momentum}_{5d}(t, i) = -\frac{P_{\text{clo
 
 $$\text{EP}_{\text{TTM}}(t, i) = \frac{\text{EPS}_{\text{TTM}}(t, i)}{P(t, i)} = \frac{1}{\text{PE}_{\text{TTM}}(t, i)}$$
 
-其中 $\text{PE}_{\text{TTM}}$ 为滚动12个月市盈率
+其中 $$\text{PE}_{\text{TTM}}$$ 为滚动12个月市盈率
 
 
 
@@ -207,7 +207,7 @@ $$\text{Amount}_{20d}(t, i) = \frac{1}{20}\sum_{k=t-19}^{t} \text{Amount}_k(i)$$
 
 
 
-由于截面分布右偏，取对数 $\text{AmtFactor}(t, i) = -\ln\left(\text{Amount}_{20d}(t, i)\right)$
+由于截面分布右偏，取对数 $$\text{AmtFactor}(t, i) = -\ln\left(\text{Amount}_{20d}(t, i)\right)$$
 
 
 

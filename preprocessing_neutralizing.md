@@ -106,7 +106,7 @@ $$L = \bar{x} - k \cdot s, \quad U = \bar{x} + k \cdot s$$
 
 $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
-其中 $Q_p$ 为第 $p$ 分位数
+其中 $$Q_p$$ 为第 $p$ 分位数
 
 该方法不受极端值影响，但是截取比例固定，要先根据分布情况进行估计
 
@@ -114,11 +114,11 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 ## 4. 缺失值填充
 
-设 $\mathbf{R}$ 为缺失指示矩阵（$R_{ij} = 1$ 若 $x_{ij}$ 缺失），$\mathbf{X}_{\mathrm{obs}}$ 为观测值，$\mathbf{X}_{\mathrm{mis}}$ 为缺失值：
+设 $\mathbf{R}$ 为缺失指示矩阵（$$R_{ij} = 1$$ 若 $$x_{ij}$$ 缺失），$$\mathbf{X}_{\mathrm{obs}}$$ 为观测值，$$\mathbf{X}_{\mathrm{mis}}$$ 为缺失值：
 
-- **MCAR** (Missing Completely At Random)：$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) = P(\mathbf{R})$
-- **MAR** (Missing At Random)：$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) = P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}})$
-- **MNAR** (Missing Not At Random)：$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) \neq P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}})$
+- **MCAR** (Missing Completely At Random)：$$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) = P(\mathbf{R})$$
+- **MAR** (Missing At Random)：$$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) = P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}})$$
+- **MNAR** (Missing Not At Random)：$$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) \neq P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}})$$
 
 该项目暂时不考虑 MNAR
 
@@ -137,7 +137,7 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 $$z_i = \frac{x_i - \bar{x}}{s}$$
 
-其中 $s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2$
+其中 $$s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2$$
 
 变换后具有如下性质：
 - $\mathbb{E}[Z] = 0$，$\mathrm{Var}(Z) = 1$
@@ -150,7 +150,7 @@ $$z_i = \frac{x_i - \bar{x}}{s}$$
 
 $$z_i = \frac{r_i - 1}{n - 1}$$
 
-其中 $r_i = \text{Rank}(x_i)$（从小到大）
+其中 $$r_i = \text{Rank}(x_i)$$（从小到大）
 
 性质如下：
 - $Z \sim \text{Uniform}[0, 1]$
@@ -189,7 +189,7 @@ $$z_i = \frac{x_i - \tilde{x}}{\text{MAD}}$$
 $$\mathbf{f} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
 
 其中：
-- $\mathbf{X}$ 的列包括：截距项 $\mathbf{1}$，对数市值 $\ln(\mathrm{Size})$，以及行业哑变量 $\mathbf{I}_1, \ldots, \mathbf{I}_{K-1}$
+- $\mathbf{X}$ 的列包括：截距项 $\mathbf{1}$，对数市值 $\ln(\mathrm{Size})$，以及行业哑变量 $$\mathbf{I}_1, \ldots, \mathbf{I}_{K-1}$$
 - $\boldsymbol{\beta} \in \mathbb{R}^p$ 为回归系数
 - $\boldsymbol{\varepsilon} \in \mathbb{R}^n$ 为残差项
 
@@ -226,7 +226,7 @@ $$\mathrm{Size}(i) = \ln\left(\mathrm{MarketCap}(i)\right)$$
 设计矩阵 $\mathbf{X}$ 可能存在共线性，某些行业与市值高度相关，例如银行业市值普遍较大, 这里使用 VIF 来评判：$$\mathrm{VIF}_j = \frac{1}{1 - R_j^2}$$，
 
 当 $\text{VIF}$ 较大，考虑删除因子；
-当 $\max(\text{VIF}_j) > 10$ 时，使用 Ridge 回归替代 OLS：
+当 $$\max(\text{VIF}_j) > 10$$ 时，使用 Ridge 回归替代 OLS：
 
 $$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^\top \mathbf{f}$$
 
@@ -244,7 +244,7 @@ $$\mathbf{f} = \alpha + \sum_{j=1}^{10} \beta_j \cdot \mathrm{BarraStyle}_j + \s
 但相关数据需额外导入
 
 
-由正交性条件，截距项会导出 $\sum\epsilon_i=0$, 因此可以在一开始就对 $f$ 和 $s$ 做中心化处理
+由正交性条件，截距项会导出 $$\sum\epsilon_i=0$$, 因此可以在一开始就对 $f$ 和 $s$ 做中心化处理
 
 下面我们考虑只做市值中性化，不分行业，那么就是求解
 ：

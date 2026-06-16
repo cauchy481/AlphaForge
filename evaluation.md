@@ -49,7 +49,7 @@ from core.evaluation import (
 
 我们使用 **Information Coefficient (IC)** 作为基本指标
 
-设 $\mathbf{f}_t \in \mathbb{R}^n$ 为 $t$ 日 $n$ 只股票的因子值向量，$\mathbf{r}_{t+1} \in \mathbb{R}^n$ 为 $t \to t+1$ 的 forward return：
+设 $$\mathbf{f}_t \in \mathbb{R}^n$$ 为 $t$ 日 $n$ 只股票的因子值向量，$$\mathbf{r}_{t+1} \in \mathbb{R}^n$$ 为 $t \to t+1$ 的 forward return：
 
 $$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
 
@@ -59,7 +59,7 @@ $$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
 
 ### IC 统计指标
 
-将每日 IC 序列 $\{\text{IC}_1, \text{IC}_2, \ldots, \text{IC}_T\}$ 聚合为标准指标：
+将每日 IC 序列 $$\{\text{IC}_1, \text{IC}_2, \ldots, \text{IC}_T\}$$ 聚合为标准指标：
 
 | 指标 | 公式 | 
 |------|------|
@@ -80,7 +80,7 @@ IC 衰减衡量因子的预测力随持有期延长的变化：
 
 $$\text{IC Decay}(h) = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t \to t+h}\right), \quad h = 1, 5, 10, 20, \ldots$$
 
-其中 $\mathbf{r}_{t \to t+h}$ 为 $h$ 日 forward return
+其中 $$\mathbf{r}_{t \to t+h}$$ 为 $h$ 日 forward return
 
 IC 衰减决定调仓频率，进而影响成本和容量
 
@@ -144,7 +144,7 @@ roll_ir   = roll_mean / ic_series.rolling(60).std()
 
 $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
 
-其中 $R_j^2$ 是因子 $j$ 对其他所有因子回归的 R²
+其中 $$R_j^2$$ 是因子 $j$ 对其他所有因子回归的 R²
 
 我们采取如下标准：
 | VIF | 判断 |
