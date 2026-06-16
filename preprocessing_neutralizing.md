@@ -274,18 +274,6 @@ universe:
 
 
 
-## 参考资料
-
-1. Hampel, F. R. (1974). The influence curve and its role in robust estimation. *Journal of the American Statistical Association*.
-2. Rousseeuw, P. J., & Croux, C. (1993). Alternatives to the median absolute deviation. *Journal of the American Statistical Association*.
-3. Rubin, D. B. (1976). Inference and missing data. *Biometrika*.
-4. Menchero, J., et al. (2011). *MSCI Barra Global Equity Risk Model*.
-5. Fama, E. F., & French, K. R. (1992). The cross-section of expected stock returns. *Journal of Finance*.
-6. Grinold, R. C., & Kahn, R. N. (2000). *Active Portfolio Management*.
-7. Frisch, R., & Waugh, F. V. (1933). Partial time regressions as compared with individual trends. *Econometrica*.
-8. Lovell, M. C. (1963). Seasonal adjustment of economic time series. *Journal of the American Statistical Association*.
-
-
 <p align="center">
   <a href="README.md">← 返回主文档</a>
 </p>

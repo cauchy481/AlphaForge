@@ -192,14 +192,6 @@ $$\text{FactorOn}_t = \begin{cases} 1 & \mathrm{Roll\_Mean}_t > 0 \;\text{and}\;
 
 
 
-## 参考资料
-
-1. Grinold, R. C., & Kahn, R. N. (2000). *Active Portfolio Management*.
-2. Qian, E. E., Hua, R. H., & Sorensen, E. H. (2007). *Quantitative Equity Portfolio Management*. 
-3. Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers. *Journal of Finance*. 
-4. Fama, E. F., & French, K. R. (1992). The cross-section of expected stock returns. *Journal of Finance*.
-
-
 <p align="center">
   <a href="README.md">← 返回主文档</a>
 </p>
