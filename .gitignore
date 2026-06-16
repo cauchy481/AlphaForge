@@ -5,5 +5,5 @@ __pycache__/
 data_cache/
 *.pkl
 *.csv
-examples/
 tests/
+examples/*.py
