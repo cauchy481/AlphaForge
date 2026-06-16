@@ -9,8 +9,6 @@
 4. [评分](#4-评分)
 5. [因子择时](#5-因子择时)
 
----
----
 
 ## API 
 
@@ -75,7 +73,6 @@ $$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
 注意：IC t-stat 假设 IC 序列是i.i.d.的，但数据通常不满足此假设，因此 $t$ 检验只做参考
 
 
----
 
 ### IC 衰减分析
 
@@ -117,7 +114,6 @@ spread = long_short_spread(group_ret)
 $$\text{Monotonicity} = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_2, \ldots, \bar{r}_N\}\right)$$
 
 
----
 
 ## 3. 稳定性分析
 
@@ -157,7 +153,6 @@ $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
 | 5–10 | 中等共线性，需要关注 |
 | > 10 | 严重共线性，需要剔除或正交化 |
 
----
 
 ## 4. 评分
 
@@ -185,7 +180,6 @@ $$
 | Win Rate > 53% | +1 |
 
 
----
 
 ## 5. 因子择时
 
@@ -197,7 +191,6 @@ $$\text{FactorOn}_t = \begin{cases} 1 & \text{Roll\_Mean}_t > 0 \;\text{and}\; \
 关键注意两点：严禁引入未来信息；阈值 $\theta$ 需要在样本外验证
 
 
----
 
 ## 参考资料
 
@@ -206,7 +199,6 @@ $$\text{FactorOn}_t = \begin{cases} 1 & \text{Roll\_Mean}_t > 0 \;\text{and}\; \
 3. Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers. *Journal of Finance*. 
 4. Fama, E. F., & French, K. R. (1992). The cross-section of expected stock returns. *Journal of Finance*.
 
----
 
 <p align="center">
   <a href="README.md">← 返回主文档</a>

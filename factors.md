@@ -7,7 +7,6 @@
 3. [因子分类](#3-因子分类)
 4. [因子规范](#4-因子规范)
 
----
 
 ## 1. 因子注册机制
 
@@ -75,7 +74,6 @@ import core.factors
         → ... 
 ```
 
----
 
 ## 2. 数据类型约定
 
@@ -103,7 +101,6 @@ import core.factors
 
 Tushare 格式类似于 `"600000.SH"`, `"000001.SZ"`，我们在这里采用简化格式：`"600000"`, `"000001"`，为了兼容两种格式，在DataLoader 内部做了处理
 
----
 
 ## 3. 因子分类
 现已简单实现了几类经典因子
@@ -176,7 +173,6 @@ $$\text{BP}(t, i) = \frac{\text{BVPS}(t, i)}{P(t, i)} = \frac{1}{\text{PB}(t, i)
 $$\text{ROE}(t, i) = \frac{\text{Net Income}_{\text{TTM}}(t, i)}{\text{Equity}(t, i)}$$
 Winsorize 到 `[-0.5, 0.5]`
 
----
 
 ### 波动率类
 1. 20日、60日等波动率
@@ -273,7 +269,6 @@ print(factor["name"], factor["category"])
 6. 将可调参数通过 `params` 字典传递，不要硬编码
 7. 如需复用其他因子，必须直接导入函数，不要通过 `FactorRegistry.compute()` 调用，那样会绕过注册检查且造成循环依赖
 
----
 
 <p align="center">
   <a href="README.md">← 返回主文档</a>

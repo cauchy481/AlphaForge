@@ -6,7 +6,6 @@
 2. [API](#2-api)
 3. [指标](#3-指标)
 
----
 
 ## 1. 架构
 
@@ -47,7 +46,6 @@ for dt in trade_dates:
 
 
 
----
 
 ## 2. API
 
@@ -153,7 +151,6 @@ ic = eval.calculate_ic(factor_series, forward_return)
 stats = eval.calculate_ic_ir(ic_series)
 ```
 
----
 
 ## 3. 指标
 
@@ -210,7 +207,6 @@ c_{\text{roundtrip}} &= c_{\text{buy}} + c_{\text{sell}} = 0.36\%
 \end{aligned}
 $$
 
----
 
 <p align="center">
   <a href="README.md">← 返回主文档</a>

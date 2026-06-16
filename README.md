@@ -4,7 +4,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 
----
 
 > 💡 若想跳过项目介绍直接上手，请前往 [快速开始](#8-快速开始) 查看运行命令，或直接浏览 [多因子分析报告示例](examples/analysis.md) 了解基于本引擎生成的示例研究
 
@@ -21,7 +20,6 @@
 3. 严格避免未来函数
 4. 考虑A股实际约束
 
----
 
 ## 目录
 
@@ -36,7 +34,6 @@
 9. [模块概览](#9-模块概览)
 
 
----
 
 ## 1. 项目结构
 
@@ -110,14 +107,12 @@ alphaforge/
     └── test_utils.py
 ```
 
----
 
 ## 2. 系统架构
 <div align="center">
   <img src="系统架构.png" width="430" height="400" />
 </div>
 
----
 
 ## 3. 因子体系
 
@@ -139,7 +134,6 @@ alphaforge/
 
 因子通过 `@FactorRegistry.register` 装饰器注册，按类别拆分到独立文件中，导入包时自动触发注册，新增因子只需在对应分类文件中编写函数并加装饰器，然后在 `__init__.py` 中同步导入即可
 
----
 
 ## 4. 预处理和中性化
 
@@ -159,7 +153,6 @@ alphaforge/
 
 管线顺序不可交换； 代码中实现了多种方法备选（MAD/Sigma/Percentile 去极值、Z-Score/Rank/MinMax/Robust 标准化等），详见独立文档
 
----
 
 ## 5. IC 分析与因子评价
 
@@ -176,7 +169,6 @@ alphaforge/
 | **稳定性诊断** | 换手率、秩自相关、滚动 IC、VIF |
 | **因子评分** | 综合评分公式、评级、多因子对比矩阵 |
 
----
 
 ## 6. 多因子合成
 实现了如下方法：
@@ -191,7 +183,6 @@ alphaforge/
 | **LASSO (L1)** | 稀疏，剔除冗余因子 |
 | **滚动窗口** | 动态估计权重 |
 
----
 
 ## 7. 回测引擎
 > **[🔧 回测引擎文档 → ](backtest.md)**
@@ -210,7 +201,6 @@ alphaforge/
 
 
 
----
 
 ## 8. 快速开始
 >  **[示例：多因子实证分析报告 →](examples/analysis.md)**
@@ -243,7 +233,6 @@ python scripts/run_factor_research.py
 python scripts/run_backtest.py
 ```
 
----
 
 ## 9. 模块概览
 
@@ -331,7 +320,6 @@ result = brinson_attribution(portfolio_return, benchmark_return, contrib)
 ```
 
 
----
 
 <p align="center">
   <i>Built by Cuachy1001</i>
