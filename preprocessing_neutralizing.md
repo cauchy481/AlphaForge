@@ -108,7 +108,7 @@ $$L = \bar{x} - k \cdot s, \quad U = \bar{x} + k \cdot s$$
  
 ### 3.4 Percentile 方法
 
-$$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
+$$L = Q\sb{c/2}, \quad U = Q\sb{1 - c/2}$$
 
 其中 $$Q_p$$ 为第 $p$ 分位数
 
@@ -118,11 +118,11 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 ## 4. 缺失值填充
 
-设 $R$ 为缺失指示矩阵（$R_{ij}=1$ 若 $x_{ij}$ 缺失），$X_{obs}$ 为观测值，$X_{mis}$ 为缺失值：
+设 $R$ 为缺失指示矩阵（$R\sb{ij}=1$ 若 $x\sb{ij}$ 缺失），$X\sb{obs}$ 为观测值，$X\sb{mis}$ 为缺失值：
 
-- **MCAR**: $P(R \mid X_{obs}, X_{mis}) = P(R)$
-- **MAR**: $P(R \mid X_{obs}, X_{mis}) = P(R \mid X_{obs})$
-- **MNAR**: $P(R \mid X_{obs}, X_{mis}) \neq P(R \mid X_{obs})$
+- **MCAR**: $P(R \mid X\sb{obs}, X\sb{mis}) = P(R)$
+- **MAR**: $P(R \mid X\sb{obs}, X\sb{mis}) = P(R \mid X\sb{obs})$
+- **MNAR**: $P(R \mid X\sb{obs}, X\sb{mis}) \neq P(R \mid X\sb{obs})$
 
 该项目暂时不考虑 MNAR
 
@@ -141,7 +141,7 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 $$z_i = \frac{x_i - \bar{x}}{s}$$
 
-其中 $$s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2$$
+其中 $$s^2 = \frac{1}{n-1}\sum\sb{i=1}^{n} (x_i - \bar{x})^2$$
 
 变换后具有如下性质：
 - $\mathbb{E}[Z] = 0$，$Var(Z) = 1$
@@ -193,13 +193,13 @@ $$z_i = \frac{x_i - \tilde{x}}{\text{MAD}}$$
 $$f = X\beta + \varepsilon$$
 
 其中：
-- $X$ 的列包括：截距项 $1$，对数市值 $\ln(Size)$，以及行业哑变量 $$I_1, \ldots, I_{K-1}$$
+- $X$ 的列包括：截距项 $1$，对数市值 $\ln(Size)$，以及行业哑变量 $$I_1, \ldots, I\sb{K-1}$$
 - $\beta \in \mathbb{R}^p$ 为回归系数
 - $\varepsilon \in \mathbb{R}^n$ 为残差项
 
 中性化后的因子值为残差：
 
-$$\hat{f}_{neutral} = \hat{\varepsilon} = f - X\hat{\beta}$$
+$$\hat{f}\sb{neutral} = \hat{\varepsilon} = f - X\hat{\beta}$$
 
 其中 $\hat{\beta} = (X^\top X)^{-1} X^\top f$ 为 OLS 估计量
 
@@ -207,7 +207,7 @@ $$\hat{f}_{neutral} = \hat{\varepsilon} = f - X\hat{\beta}$$
 
 1. 正交性
 
-$$X^\top \hat{f}_{neutral} = 0$$
+$$X^\top \hat{f}\sb{neutral} = 0$$
 
 
 2. **方差分解**：
@@ -220,7 +220,7 @@ $$Var(f) = Var(X\hat{\beta}) + Var(\hat{\varepsilon})$$
 
 行业分类为 $K$ 个行业，我们引入 $K-1$ 个哑变量，基准行业的哑变量为全0：
 
-$$I_{k}(i) = \begin{cases} 1 & \text{股票 i 属于行业 k} \\\\ 0 & \text{其他} \end{cases}, \quad k = 1, \ldots, K-1$$
+$$I\sb{k}(i) = \begin{cases} 1 & \text{股票 i 属于行业 k} \\\\ 0 & \text{其他} \end{cases}, \quad k = 1, \ldots, K-1$$
 
 使用对数市值作为连续协变量：
 
@@ -236,18 +236,18 @@ $$
 当 $VIF$ 较大，考虑删除因子；
 当 $$\max(\text{VIF}_j) > 10$$ 时，使用 Ridge 回归替代 OLS：
 
-$$\hat{\beta}_{\text{ridge}} = (X^\top X + \lambda I)^{-1} X^\top f$$
+$$\hat{\beta}\sb{\text{ridge}} = (X^\top X + \lambda I)^{-1} X^\top f$$
 
 ###  中性化方案
 
 本项目采用行业 + 市值中性化 (`"industry_size"`) 
 
-$$f = \alpha + \beta_1 \cdot \ln(Size) + \sum_{k=1}^{K-1} \gamma_k I_k + \varepsilon$$
+$$f = \alpha + \beta_1 \cdot \ln(Size) + \sum\sb{k=1}^{K-1} \gamma_k I_k + \varepsilon$$
 
 
 另外，本项目支持 Barra格式数据，因此也可以采用 Barra 全风格中性化 (`"barra"`)
 
-$$f = \alpha + \sum_{j=1}^{10} \beta_j \cdot BarraStyle_j + \sum_{k=1}^{K-1} \gamma_k I_k + \varepsilon$$
+$$f = \alpha + \sum\sb{j=1}^{10} \beta_j \cdot BarraStyle_j + \sum\sb{k=1}^{K-1} \gamma_k I_k + \varepsilon$$
 
 但相关数据需额外导入
 

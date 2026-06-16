@@ -158,22 +158,22 @@ stats = eval.calculate_ic_ir(ic_series)
 
 | 指标 | 计算公式 |
 |------|---------|
-| **累计收益** | $$\displaystyle CumRet = \prod_{i=1}^{T}(1+r_i) - 1$$ |
-| **年化收益** | $$\displaystyle R_{annual} = (1+CumRet)^{\frac{252}{T}} - 1$$ |
-| **年化波动** | $$\displaystyle \sigma_{annual} = \sigma_{daily} \times \sqrt{252}$$ |
-| **夏普比率** | $$\displaystyle Sharpe = \frac{R_{annual} - R_f}{\sigma_{annual}}$$ |
-| **最大回撤** | $$\displaystyle MDD = \min_{t}\left(\frac{NAV_t}{\max_{s \le t}NAV_s} - 1\right)$$ |
-| **卡玛比率** | $$\displaystyle Calmar = \frac{R_{annual}}{\lvert MDD \rvert}$$ |
-| **胜率** | $$\displaystyle WinRate = \frac{N_{r_i > 0}}{T}$$ |
+| **累计收益** | $$\displaystyle CumRet = \prod\sb{i=1}^{T}(1+r_i) - 1$$ |
+| **年化收益** | $$\displaystyle R\sb{annual} = (1+CumRet)^{\frac{252}{T}} - 1$$ |
+| **年化波动** | $$\displaystyle \sigma\sb{annual} = \sigma\sb{daily} \times \sqrt{252}$$ |
+| **夏普比率** | $$\displaystyle Sharpe = \frac{R\sb{annual} - R_f}{\sigma\sb{annual}}$$ |
+| **最大回撤** | $$\displaystyle MDD = \min\sb{t}\left(\frac{NAV_t}{\max\sb{s \le t}NAV_s} - 1\right)$$ |
+| **卡玛比率** | $$\displaystyle Calmar = \frac{R\sb{annual}}{\lvert MDD \rvert}$$ |
+| **胜率** | $$\displaystyle WinRate = \frac{N\sb{r_i > 0}}{T}$$ |
 
 ### IC 指标
 
 | 指标 | 计算公式 |
 |------|---------|
-| **IC Mean** | $$\displaystyle \overline{IC} = \frac{1}{T}\sum_{t=1}^{T} IC_t$$ |
-| **IC Std** | $$\displaystyle \sigma_{IC} = \sqrt{\frac{1}{T}\sum_{t=1}^{T}\left(IC_t - \overline{IC}\right)^2}$$ |
-| **IC IR** | $$\displaystyle IR = \frac{\overline{IC}}{\sigma_{IC}}$$ |
-| **IC Win Rate** | $$\displaystyle IC\ WinRate = \frac{N_{IC_t > 0}}{T}$$ |
+| **IC Mean** | $$\displaystyle \overline{IC} = \frac{1}{T}\sum\sb{t=1}^{T} IC_t$$ |
+| **IC Std** | $$\displaystyle \sigma\sb{IC} = \sqrt{\frac{1}{T}\sum\sb{t=1}^{T}\left(IC_t - \overline{IC}\right)^2}$$ |
+| **IC IR** | $$\displaystyle IR = \frac{\overline{IC}}{\sigma\sb{IC}}$$ |
+| **IC Win Rate** | $$\displaystyle IC\ WinRate = \frac{N\sb{IC_t > 0}}{T}$$ |
 
 其中单日 IC 定义：
 
@@ -185,17 +185,17 @@ $$
 
 | 指标 | 计算公式 |
 |------|---------|
-| **换手率** | $$\displaystyle Turnover = \frac{N_{buy} + N_{sell}}{2 \times N_{hold}} \in [0,1]$$ |
-| **交易成本** | $$\displaystyle Cost = \sum_{k}\left(c_{comm} + c_{stamp}\cdot 1_{sell} + c_{slip}\right)\cdot V_k$$ |
-| **交易笔数** | $$\displaystyle N_{trade}$$ |
+| **换手率** | $$\displaystyle Turnover = \frac{N\sb{buy} + N\sb{sell}}{2 \times N\sb{hold}} \in [0,1]$$ |
+| **交易成本** | $$\displaystyle Cost = \sum\sb{k}\left(c\sb{comm} + c\sb{stamp}\cdot 1\sb{sell} + c\sb{slip}\right)\cdot V_k$$ |
+| **交易笔数** | $$\displaystyle N\sb{trade}$$ |
 
 ### 成本模型
 
 | 费用 | 费率 | 方向 |
 |------|------|------|
-| 佣金 $$c_{comm}$$ | $$0.03\%$$ | 买卖双向 |
-| 印花税 $$c_{stamp}$$ | $$0.1\%$$ | 卖出 |
-| 滑点 $$c_{slip}$$ | $$0.1\%$$ | 买卖双向 |
+| 佣金 $$c\sb{comm}$$ | $$0.03\%$$ | 买卖双向 |
+| 印花税 $$c\sb{stamp}$$ | $$0.1\%$$ | 卖出 |
+| 滑点 $$c\sb{slip}$$ | $$0.1\%$$ | 买卖双向 |
 
 其中各方向成本费率：
 
