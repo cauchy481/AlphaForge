@@ -158,22 +158,22 @@ stats = eval.calculate_ic_ir(ic_series)
 
 | 指标 | 计算公式 |
 |------|---------|
-| **累计收益** | $$\displaystyle \mathrm{CumRet} = \prod_{i=1}^{T}(1+r_i) - 1$$ |
-| **年化收益** | $$\displaystyle R_{\mathrm{annual}} = (1+\mathrm{CumRet})^{\frac{252}{T}} - 1$$ |
-| **年化波动** | $$\displaystyle \sigma_{\mathrm{annual}} = \sigma_{\mathrm{daily}} \times \sqrt{252}$$ |
-| **夏普比率** | $$\displaystyle \mathrm{Sharpe} = \frac{R_{\mathrm{annual}} - R_f}{\sigma_{\mathrm{annual}}}$$ |
-| **最大回撤** | $$\displaystyle \mathrm{MDD} = \min_{t}\left(\frac{\mathrm{NAV}_t}{\max_{s \le t}\mathrm{NAV}_s} - 1\right)$$ |
-| **卡玛比率** | $$\displaystyle \mathrm{Calmar} = \frac{R_{\mathrm{annual}}}{\lvert \mathrm{MDD} \rvert}$$ |
-| **胜率** | $$\displaystyle \mathrm{WinRate} = \frac{\#\{r_i > 0\}}{T}$$ |
+| **累计收益** | $$\displaystyle CumRet = \prod_{i=1}^{T}(1+r_i) - 1$$ |
+| **年化收益** | $$\displaystyle R_{annual} = (1+CumRet)^{\frac{252}{T}} - 1$$ |
+| **年化波动** | $$\displaystyle \sigma_{annual} = \sigma_{daily} \times \sqrt{252}$$ |
+| **夏普比率** | $$\displaystyle Sharpe = \frac{R_{annual} - R_f}{\sigma_{annual}}$$ |
+| **最大回撤** | $$\displaystyle MDD = \min_{t}\left(\frac{NAV_t}{\max_{s \le t}NAV_s} - 1\right)$$ |
+| **卡玛比率** | $$\displaystyle Calmar = \frac{R_{annual}}{\lvert MDD \rvert}$$ |
+| **胜率** | $$\displaystyle WinRate = \frac{N_{r_i > 0}}{T}$$ |
 
 ### IC 指标
 
 | 指标 | 计算公式 |
 |------|---------|
-| **IC Mean** | $$\displaystyle \overline{\mathrm{IC}} = \frac{1}{T}\sum_{t=1}^{T} \mathrm{IC}_t$$ |
-| **IC Std** | $$\displaystyle \sigma_{\mathrm{IC}} = \sqrt{\frac{1}{T}\sum_{t=1}^{T}\left(\mathrm{IC}_t - \overline{\mathrm{IC}}\right)^2}$$ |
-| **IC IR** | $$\displaystyle \mathrm{IR} = \frac{\overline{\mathrm{IC}}}{\sigma_{\mathrm{IC}}}$$ |
-| **IC Win Rate** | $$\displaystyle \mathrm{IC\ WinRate} = \frac{\#\{\mathrm{IC}_t > 0\}}{T}$$ |
+| **IC Mean** | $$\displaystyle \overline{IC} = \frac{1}{T}\sum_{t=1}^{T} IC_t$$ |
+| **IC Std** | $$\displaystyle \sigma_{IC} = \sqrt{\frac{1}{T}\sum_{t=1}^{T}\left(IC_t - \overline{IC}\right)^2}$$ |
+| **IC IR** | $$\displaystyle IR = \frac{\overline{IC}}{\sigma_{IC}}$$ |
+| **IC Win Rate** | $$\displaystyle IC\ WinRate = \frac{N_{IC_t > 0}}{T}$$ |
 
 其中单日 IC 定义：
 
@@ -185,17 +185,17 @@ $$
 
 | 指标 | 计算公式 |
 |------|---------|
-| **换手率** | $$\displaystyle \mathrm{Turnover} = \frac{N_{\mathrm{buy}} + N_{\mathrm{sell}}}{2 \times N_{\mathrm{hold}}} \in [0,1]$$ |
-| **交易成本** | $$\displaystyle \mathrm{Cost} = \sum_{k}\left(c_{\mathrm{comm}} + c_{\mathrm{stamp}}\cdot\mathbb{1}_{\mathrm{sell}} + c_{\mathrm{slip}}\right)\cdot V_k$$ |
-| **交易笔数** | $$\displaystyle N_{\mathrm{trade}}$$ |
+| **换手率** | $$\displaystyle Turnover = \frac{N_{buy} + N_{sell}}{2 \times N_{hold}} \in [0,1]$$ |
+| **交易成本** | $$\displaystyle Cost = \sum_{k}\left(c_{comm} + c_{stamp}\cdot\mathbb{1}_{sell} + c_{slip}\right)\cdot V_k$$ |
+| **交易笔数** | $$\displaystyle N_{trade}$$ |
 
 ### 成本模型
 
 | 费用 | 费率 | 方向 |
 |------|------|------|
-| 佣金 $$c_{\mathrm{comm}}$$ | $$0.03\%$$ | 买卖双向 |
-| 印花税 $$c_{\mathrm{stamp}}$$ | $$0.1\%$$ | 卖出 |
-| 滑点 $$c_{\mathrm{slip}}$$ | $$0.1\%$$ | 买卖双向 |
+| 佣金 $$c_{comm}$$ | $$0.03\%$$ | 买卖双向 |
+| 印花税 $$c_{stamp}$$ | $$0.1\%$$ | 卖出 |
+| 滑点 $$c_{slip}$$ | $$0.1\%$$ | 买卖双向 |
 
 其中各方向成本费率：
 

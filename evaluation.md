@@ -49,9 +49,9 @@ from core.evaluation import (
 
 我们使用 **Information Coefficient (IC)** 作为基本指标
 
-设 $$\mathbf{f}_t \in \mathbb{R}^n$$ 为 $t$ 日 $n$ 只股票的因子值向量，$$\mathbf{r}_{t+1} \in \mathbb{R}^n$$ 为 $t \to t+1$ 的 forward return：
+设 $$f_t \in \mathbb{R}^n$$ 为 $t$ 日 $n$ 只股票的因子值向量，$$r_{t+1} \in \mathbb{R}^n$$ 为 $t \to t+1$ 的 forward return：
 
-$$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
+$$\text{IC}_t = \text{Corr}\left(f_t,\; r_{t+1}\right)$$
 
 
 实现层面我们使用 **Rank IC** 为主， 同时避免未来函数
@@ -63,11 +63,11 @@ $$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
 
 | 指标 | 公式 | 
 |------|------|
-| **IC Mean** | $$\bar{\mathrm{IC}} = \frac{1}{T}\sum \mathrm{IC}_t$$ | 
-| **IC Std** | $$\sigma_{\mathrm{IC}} = \sqrt{\frac{1}{T}\sum (\mathrm{IC}_t - \bar{\mathrm{IC}})^2}$$ | 
-| **IC IR** | $$\mathrm{IR} = \bar{\mathrm{IC}} / \sigma_{\mathrm{IC}}$$ | 
-| **IC Win Rate** | $$\frac{\#\{\mathrm{IC}_t > 0\}}{T}$$ | 
-| **IC t-stat** | $$t = \bar{\mathrm{IC}} / (\sigma_{\mathrm{IC}} / \sqrt{T})$$ | 
+| **IC Mean** | $$\bar{IC} = \frac{1}{T}\sum IC_t$$ | 
+| **IC Std** | $$\sigma_{IC} = \sqrt{\frac{1}{T}\sum (IC_t - \bar{IC})^2}$$ | 
+| **IC IR** | $$IR = \bar{IC} / \sigma_{IC}$$ | 
+| **IC Win Rate** | $$\frac{N_{IC_t > 0}}{T}$$ | 
+| **IC t-stat** | $$t = \bar{IC} / (\sigma_{IC} / \sqrt{T})$$ | 
 
 
 注意：IC t-stat 假设 IC 序列是i.i.d.的，但数据通常不满足此假设，因此 $t$ 检验只做参考
@@ -78,9 +78,9 @@ $$\text{IC}_t = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t+1}\right)$$
 
 IC 衰减衡量因子的预测力随持有期延长的变化：
 
-$$\text{IC Decay}(h) = \text{Corr}\left(\mathbf{f}_t,\; \mathbf{r}_{t \to t+h}\right), \quad h = 1, 5, 10, 20, \ldots$$
+$$\text{IC Decay}(h) = \text{Corr}\left(f_t,\; r_{t \to t+h}\right), \quad h = 1, 5, 10, 20, \ldots$$
 
-其中 $$\mathbf{r}_{t \to t+h}$$ 为 $h$ 日 forward return
+其中 $$r_{t \to t+h}$$ 为 $h$ 日 forward return
 
 IC 衰减决定调仓频率，进而影响成本和容量
 
@@ -111,7 +111,7 @@ spread = long_short_spread(group_ret)
 
 计算组号与组收益的 Spearman 秩相关：
 
-$$\mathrm{Monotonicity} = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_2, \ldots, \bar{r}_N\}\right)$$
+$$Monotonicity = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r}_2, \ldots, \bar{r}_N\}\right)$$
 
 
 
@@ -122,9 +122,9 @@ $$\mathrm{Monotonicity} = \rho_s\left(\{1, 2, \ldots, N\},\; \{\bar{r}_1, \bar{r
 ### 换手率（Turnover）
 通过相邻两日因子值的**秩自相关**（Rank Autocorrelation）来估计：
 
-$$\text{Rank Autocorr}_t = \rho_s\left(\mathbf{f}_{t-1},\; \mathbf{f}_t\right)$$
+$$\text{Rank Autocorr}_t = \rho_s\left(f_{t-1},\; f_t\right)$$
 
-$$\mathrm{Turnover} \approx 1 - \text{Rank Autocorr}$$
+$$Turnover \approx 1 - \text{Rank Autocorr}$$
 
 
 
@@ -159,10 +159,10 @@ $$\text{VIF}_j = \frac{1}{1 - R_j^2}$$
 我们实现了两种综合评分 metrics
 1. 综合加权
 $$
-\text{Score} = 0.40 × \mathrm{IC\_IR}      
-         + 0.20 × \mathrm{IC\_Mean}     
-         + 0.20 × \mathrm{Monotonicity} 
-         + 0.20 × (1 - \mathrm{Turnover})  
+\text{Score} = 0.40 × IC\_IR      
+         + 0.20 × IC\_Mean     
+         + 0.20 × Monotonicity 
+         + 0.20 × (1 - Turnover)  
 $$
 
 2. 等级赋分
@@ -171,9 +171,9 @@ $$
 
 | 条件 | 得分 |
 |------|------|
-| $$\vert\mathrm{IR}\vert > 0.75$$ | +3 |
-| $$\vert\mathrm{IR}\vert > 0.5$$ | +2 |
-| $$\vert\mathrm{IR}\vert > 0.3$$ | +1 |
+| $$\vertIR\vert > 0.75$$ | +3 |
+| $$\vertIR\vert > 0.5$$ | +2 |
+| $$\vertIR\vert > 0.3$$ | +1 |
 | t-stat > 3.0 | +2 |
 | t-stat > 2.0 | +1 |
 | Win Rate > 58% | +2 |
@@ -186,7 +186,7 @@ $$
 因子表现不是恒定不变的, 因此我们滚动监控 IC/IR 的信号，在因子失效期暂时停用
 
 
-$$\text{FactorOn}_t = \begin{cases} 1 & \mathrm{Roll\_Mean}_t > 0 \;\text{and}\; \mathrm{Roll\_IR}_t > \theta \\\\ 0 & \text{otherwise} \end{cases}$$
+$$\text{FactorOn}_t = \begin{cases} 1 & Roll\_Mean_t > 0 \;\text{and}\; Roll\_IR_t > \theta \\\\ 0 & \text{otherwise} \end{cases}$$
 
 关键注意两点：严禁引入未来信息；阈值 $\theta$ 需要在样本外验证
 

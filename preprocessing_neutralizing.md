@@ -83,9 +83,13 @@ $$U = \tilde{x} + k \cdot b \cdot \text{MAD}$$
 
 #### Proof
 假设数据来自正态分布 $X \sim \mathcal{N}(\mu, \sigma^2)$，则由一致性，中位数 $\tilde{X} \to \mu$
-$$\text{median}\left(\left|x - \tilde{x}\right|\right) = \sigma \cdot \text{median}\left(\frac{\left|x - \tilde{x}\right|}{\sigma}\right) =:\sigma z_M
+
 $$
-$$P\left(\frac{\left|x - \tilde{x}\right|}{\sigma}\leq  z_M \right)=2\Phi(z_M)-1=0.5
+\text{median}\left(\left|x - \tilde{x}\right|\right) = \sigma \cdot \text{median}\left(\frac{\left|x - \tilde{x}\right|}{\sigma}\right) =:\sigma z_M
+$$
+
+$$
+P\left(\frac{\left|x - \tilde{x}\right|}{\sigma}\leq  z_M \right)=2\Phi(z_M)-1=0.5
 $$
 
 
@@ -114,11 +118,11 @@ $$L = Q_{c/2}, \quad U = Q_{1 - c/2}$$
 
 ## 4. 缺失值填充
 
-设 $\mathbf{R}$ 为缺失指示矩阵（$$R_{ij} = 1$$ 若 $$x_{ij}$$ 缺失），$$\mathbf{X}_{\mathrm{obs}}$$ 为观测值，$$\mathbf{X}_{\mathrm{mis}}$$ 为缺失值：
+设 $R$ 为缺失指示矩阵（$$R_{ij} = 1$$ 若 $$x_{ij}$$ 缺失），$$X_{obs}$$ 为观测值，$$X_{mis}$$ 为缺失值：
 
-- **MCAR** (Missing Completely At Random)：$$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) = P(\mathbf{R})$$
-- **MAR** (Missing At Random)：$$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) = P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}})$$
-- **MNAR** (Missing Not At Random)：$$P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}}, \mathbf{X}_{\mathrm{mis}}) \neq P(\mathbf{R} \mid \mathbf{X}_{\mathrm{obs}})$$
+- **MCAR** (Missing Completely At Random)：$$P(R \mid X_{obs}, X_{mis}) = P(R)$$
+- **MAR** (Missing At Random)：$$P(R \mid X_{obs}, X_{mis}) = P(R \mid X_{obs})$$
+- **MNAR** (Missing Not At Random)：$$P(R \mid X_{obs}, X_{mis}) \neq P(R \mid X_{obs})$$
 
 该项目暂时不考虑 MNAR
 
@@ -140,7 +144,7 @@ $$z_i = \frac{x_i - \bar{x}}{s}$$
 其中 $$s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2$$
 
 变换后具有如下性质：
-- $\mathbb{E}[Z] = 0$，$\mathrm{Var}(Z) = 1$
+- $\mathbb{E}[Z] = 0$，$Var(Z) = 1$
 - 保持原始分布的偏度和峰度
 - 若 $X$ 为正态分布，则 $Z \sim \mathcal{N}(0, 1)$
 
@@ -184,31 +188,31 @@ $$z_i = \frac{x_i - \tilde{x}}{\text{MAD}}$$
 
 该项目采用线性回归来实现中性化
 
-设 $\mathbf{f} \in \mathbb{R}^n$ 为 $n$ 只股票在某个截面上的原始因子向量，$\mathbf{X} \in \mathbb{R}^{n \times p}$ 为风险因子载荷矩阵（含截距），建立横截面回归：
+设 $f \in \mathbb{R}^n$ 为 $n$ 只股票在某个截面上的原始因子向量，$X \in \mathbb{R}^{n \times p}$ 为风险因子载荷矩阵（含截距），建立横截面回归：
 
-$$\mathbf{f} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+$$f = X\beta + \varepsilon$$
 
 其中：
-- $\mathbf{X}$ 的列包括：截距项 $\mathbf{1}$，对数市值 $\ln(\mathrm{Size})$，以及行业哑变量 $$\mathbf{I}_1, \ldots, \mathbf{I}_{K-1}$$
-- $\boldsymbol{\beta} \in \mathbb{R}^p$ 为回归系数
-- $\boldsymbol{\varepsilon} \in \mathbb{R}^n$ 为残差项
+- $X$ 的列包括：截距项 $1$，对数市值 $\ln(Size)$，以及行业哑变量 $$I_1, \ldots, I_{K-1}$$
+- $\beta \in \mathbb{R}^p$ 为回归系数
+- $\varepsilon \in \mathbb{R}^n$ 为残差项
 
 中性化后的因子值为残差：
 
-$$\hat{\mathbf{f}}_{\mathrm{neutral}} = \hat{\boldsymbol{\varepsilon}} = \mathbf{f} - \mathbf{X}\hat{\boldsymbol{\beta}}$$
+$$\hat{f}_{neutral} = \hat{\varepsilon} = f - X\hat{\beta}$$
 
-其中 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{f}$ 为 OLS 估计量
+其中 $\hat{\beta} = (X^\top X)^{-1} X^\top f$ 为 OLS 估计量
 
 不难得到下面的性质：
 
 1. 正交性
 
-$$\mathbf{X}^\top \hat{\mathbf{f}}_{\mathrm{neutral}} = \mathbf{0}$$
+$$X^\top \hat{f}_{neutral} = 0$$
 
 
 2. **方差分解**：
 
-$$\mathrm{Var}(\mathbf{f}) = \mathrm{Var}(\mathbf{X}\hat{\boldsymbol{\beta}}) + \mathrm{Var}(\hat{\boldsymbol{\varepsilon}})$$
+$$Var(f) = Var(X\hat{\beta}) + Var(\hat{\varepsilon})$$
 
 
 
@@ -216,30 +220,34 @@ $$\mathrm{Var}(\mathbf{f}) = \mathrm{Var}(\mathbf{X}\hat{\boldsymbol{\beta}}) + 
 
 行业分类为 $K$ 个行业，我们引入 $K-1$ 个哑变量，基准行业的哑变量为全0：
 
-$$\mathbf{I}_{k}(i) = \begin{cases} 1 & \text{股票 i 属于行业 k} \\\\ 0 & \text{其他} \end{cases}, \quad k = 1, \ldots, K-1$$
+$$I_{k}(i) = \begin{cases} 1 & \text{股票 i 属于行业 k} \\\\ 0 & \text{其他} \end{cases}, \quad k = 1, \ldots, K-1$$
 
 使用对数市值作为连续协变量：
 
-$$\mathrm{Size}(i) = \ln\left(\mathrm{MarketCap}(i)\right)$$
+$$Size(i) = \ln\left(MarketCap(i)\right)$$
 
 
-设计矩阵 $\mathbf{X}$ 可能存在共线性，某些行业与市值高度相关，例如银行业市值普遍较大, 这里使用 VIF 来评判：$$\mathrm{VIF}_j = \frac{1}{1 - R_j^2}$$，
+设计矩阵 $X$ 可能存在共线性，某些行业与市值高度相关，例如银行业市值普遍较大, 这里使用 VIF 来评判：
 
-当 $\text{VIF}$ 较大，考虑删除因子；
+$$
+VIF_j = \frac{1}{1 - R_j^2}
+$$
+
+当 $VIF$ 较大，考虑删除因子；
 当 $$\max(\text{VIF}_j) > 10$$ 时，使用 Ridge 回归替代 OLS：
 
-$$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^\top \mathbf{f}$$
+$$\hat{\beta}_{\text{ridge}} = (X^\top X + \lambda I)^{-1} X^\top f$$
 
 ###  中性化方案
 
 本项目采用行业 + 市值中性化 (`"industry_size"`) 
 
-$$\mathbf{f} = \alpha + \beta_1 \cdot \ln(\mathrm{Size}) + \sum_{k=1}^{K-1} \gamma_k \mathbf{I}_k + \boldsymbol{\varepsilon}$$
+$$f = \alpha + \beta_1 \cdot \ln(Size) + \sum_{k=1}^{K-1} \gamma_k I_k + \varepsilon$$
 
 
 另外，本项目支持 Barra格式数据，因此也可以采用 Barra 全风格中性化 (`"barra"`)
 
-$$\mathbf{f} = \alpha + \sum_{j=1}^{10} \beta_j \cdot \mathrm{BarraStyle}_j + \sum_{k=1}^{K-1} \gamma_k \mathbf{I}_k + \boldsymbol{\varepsilon}$$
+$$f = \alpha + \sum_{j=1}^{10} \beta_j \cdot BarraStyle_j + \sum_{k=1}^{K-1} \gamma_k I_k + \varepsilon$$
 
 但相关数据需额外导入
 
@@ -248,8 +256,8 @@ $$\mathbf{f} = \alpha + \sum_{j=1}^{10} \beta_j \cdot \mathrm{BarraStyle}_j + \s
 
 下面我们考虑只做市值中性化，不分行业，那么就是求解
 ：
-$$ s \perp f_{\mathrm{neutral}} = f - \hat{\beta} \cdot s  $$
-得到 $\hat{\beta} = \frac{\mathrm{Cov}(f, s)}{\mathrm{Var}(s)}$
+$$ s \perp f_{neutral} = f - \hat{\beta} \cdot s  $$
+得到 $\hat{\beta} = \frac{Cov(f, s)}{Var(s)}$
 
 
 
