@@ -19,7 +19,7 @@ class DataLoader:
         self._ensure_dirs()
 
     def _ensure_dirs(self):
-        for sub in ["daily", "fundamental", "industry", "calendar"]:
+        for sub in ["daily", "daily_basic", "fundamental", "industry", "calendar", "index"]:
             (self.cache_dir / sub).mkdir(parents=True, exist_ok=True)
 
     # 交易日历
@@ -92,6 +92,59 @@ class DataLoader:
             except Exception:
                 continue
 
+    def download_daily_basic(
+        self,
+        start_date: str,
+        end_date: str,
+        force_update: bool = False,
+    ) -> None:
+        """批量下载每日基本面指标（PE/PB/市值/ROE等），价值和质量因子依赖此数据"""
+        basic_dir = self.cache_dir / "daily_basic"
+        dates = self.get_trade_calendar(start_date, end_date)
+
+        for dt in dates:
+            file_path = basic_dir / f"{dt}.csv"
+            if file_path.exists() and not force_update:
+                continue
+            try:
+                df = self.pro.daily_basic(
+                    trade_date=dt,
+                    fields="ts_code,pe_ttm,pb,ps_ttm,dv_ttm,total_mv,circ_mv",
+                )
+                if not df.empty:
+                    df.to_csv(file_path, index=False)
+            except Exception:
+                continue
+
+    def download_index_daily(
+        self,
+        index_codes: Optional[List[str]] = None,
+        start_date: str = "20100101",
+        end_date: str = "20991231",
+        force_update: bool = False,
+    ) -> None:
+        """下载指数日线数据（默认下载沪深300、中证500、上证指数）"""
+        if index_codes is None:
+            index_codes = ["000300.SH", "000905.SH", "000001.SH"]
+        index_dir = self.cache_dir / "index"
+
+        for code in index_codes:
+            safe_code = code.replace(".", "_")
+            file_path = index_dir / f"{safe_code}.csv"
+            if file_path.exists() and not force_update:
+                continue
+            try:
+                df = self.pro.index_daily(
+                    ts_code=code,
+                    start_date=start_date,
+                    end_date=end_date,
+                )
+                if not df.empty:
+                    df = df.sort_values("trade_date").reset_index(drop=True)
+                    df.to_csv(file_path, index=False)
+            except Exception:
+                continue
+
     def get_daily_data(self, date: str) -> pd.DataFrame:
         """读取单日行情数据"""
         raw_path = self.cache_dir / "daily" / f"{date}.csv"
@@ -144,8 +197,45 @@ class DataLoader:
             return pd.DataFrame()
         return pd.concat(frames, ignore_index=True)
 
+    def get_index_daily(self, index_code: str = "000300.SH") -> pd.DataFrame:
+        """读取指数日线数据，含 trade_date 和 pct_chg 列"""
+        safe_code = index_code.replace(".", "_")
+        file_path = self.cache_dir / "index" / f"{safe_code}.csv"
+        if not file_path.exists():
+            return pd.DataFrame()
+        return pd.read_csv(file_path, dtype={"trade_date": str})
+
+    def get_limit_status(self, date: str) -> pd.DataFrame:
+        """
+        获取指定日期的涨跌停状态。
+        返回 DataFrame(index=code, columns=['is_limit_up', 'is_limit_down'])。
+        涨停判断：pct_chg >= 9.8%（普通股）；ST股阈值为 4.8%。
+        """
+        df = self.get_daily_data(date)
+        if df.empty:
+            return pd.DataFrame()
+        if "code" not in df.columns and "ts_code" in df.columns:
+            df["code"] = df["ts_code"]
+        df = df.set_index("code")
+        result = pd.DataFrame(index=df.index)
+        if "pct_chg" not in df.columns:
+            return result
+        pct = df["pct_chg"].astype(float)
+        # ST股涨跌幅限制±5%，普通股±10%；用 name 列区分
+        if "name" in df.columns:
+            is_st = df["name"].str.contains("ST|\\*ST", na=False)
+            up_thresh = is_st.map({True: 4.8, False: 9.8})
+            down_thresh = is_st.map({True: -4.8, False: -9.8})
+        else:
+            up_thresh = 9.8
+            down_thresh = -9.8
+        result["is_limit_up"] = pct >= up_thresh
+        result["is_limit_down"] = pct <= down_thresh
+        return result
+
     def get_daily_returns(self, date: str) -> pd.DataFrame:
-        """读取 T+1 日收益数据"""
+        """返回指定日期的行情数据（含 pct_chg 当日涨跌幅）。
+        注意：这不是 forward return；如需 T+1 收益，请直接读取下一交易日数据。"""
         df = self.get_daily_data(date)
         if df.empty:
             return df

@@ -21,18 +21,24 @@ def brinson_attribution(
     factor_contributions: pd.Series,
 ) -> Dict:
     """
-    简化版 Brinson 归因
-    总超额收益 = 配置收益 + 选股收益 + 交互项
+    基于因子贡献的绩效归因。
+
+    总超额收益 = 因子配置收益 + 残差选股收益
+
+    - factor_allocation: 各因子贡献之和，即因子驱动的超额部分
+    - residual_selection: 总超额中扣除因子贡献后的残差，对应个股选择和模型外信息
+    - contributions: 各因子单独贡献 Series
+
+    注意：这不是严格的 Brinson-Hood-Beebower 模型（需要分行业权重和收益），
+    而是因子层面的线性归因分解。
     """
     total_excess = portfolio_return - benchmark_return
-    allocation = factor_contributions.sum()
-    selection = portfolio_return - allocation
-    interaction = total_excess - allocation - selection
+    factor_allocation = float(factor_contributions.sum())
+    residual_selection = total_excess - factor_allocation
 
     return {
         "total_excess": total_excess,
-        "factor_allocation": allocation,
-        "stock_selection": selection,
-        "interaction": interaction,
+        "factor_allocation": factor_allocation,
+        "residual_selection": residual_selection,
         "contributions": factor_contributions,
     }

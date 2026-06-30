@@ -33,38 +33,54 @@ class BacktestEngine:
         rebalance_freq: int = 5,
         enable_cost: bool = True,
         calculate_ic: bool = True,
+        benchmark_index: str = "000300.SH",
+        apply_preprocessing: bool = True,
     ) -> dict:
 
         trade_dates = self.loader.get_trade_calendar(start_date, end_date)
         use_external = factor_values is not None
 
+        # 加载基准指数日线
+        bm_returns: dict = {}
+        bm_df = self.loader.get_index_daily(benchmark_index)
+        if not bm_df.empty and "trade_date" in bm_df.columns and "pct_chg" in bm_df.columns:
+            bm_df = bm_df.set_index("trade_date")
+            bm_returns = (bm_df["pct_chg"].astype(float) / 100.0).to_dict()
+
         daily_returns_list = []
         daily_returns_dates = []
+        bm_returns_list = []
         ic_list = []
         ic_dates = []
         turnover_list = []
 
         for i, dt in enumerate(trade_dates):
-            # 第一天跳过
             prev_dt = trade_dates[i - 1] if i > 0 else None
 
-            # ── 盘前：用 T-1 数据生成信号 ──
-            signal = []
+            # ── 盘前：用 T-1 数据生成信号（经过预处理）──
+            signal: List[str] = []
             if prev_dt is not None:
                 if use_external:
                     signal = self._signal_from_series(prev_dt, factor_values, top_n)
                 else:
-                    signal = self._generate_signal(prev_dt, factor_name, top_n)
+                    signal = self._generate_signal(
+                        prev_dt, factor_name, top_n, apply_preprocessing
+                    )
 
-            # ── 盘中：调仓 ──
+            # ── 盘中：调仓（过滤涨跌停）──
             is_rebalance = (i % rebalance_freq == 0)
             rebalance_info = None
             if is_rebalance and signal:
-                rebalance_info = self.portfolio.rebalance(signal)
+                limit_status = self.loader.get_limit_status(dt)
+                rebalance_info = self.portfolio.rebalance(signal, limit_status=limit_status)
                 turnover_list.append(rebalance_info["turnover"])
                 if i < 5 * rebalance_freq:
                     label = factor_name if not use_external else "composite"
-                    print(f"{dt} | 选股({label}): {signal[:3]}... | 换手: {rebalance_info['turnover']:.1%}")
+                    print(
+                        f"{dt} | 选股({label}): {signal[:3]}... "
+                        f"| 实际买入: {len(rebalance_info['buy_list'])} 只 "
+                        f"| 换手: {rebalance_info['turnover']:.1%}"
+                    )
 
             # ── 盘后：收益结算 ──
             ret_df = self.loader.get_daily_data(dt)
@@ -74,13 +90,14 @@ class BacktestEngine:
                 ret_df["code"] = ret_df["ts_code"]
             ret_df = ret_df.set_index("code")
 
-            port_ret = self._calc_portfolio_return(
-                ret_df, enable_cost, rebalance_info
-            )
+            port_ret = self._calc_portfolio_return(ret_df, enable_cost, rebalance_info)
             if port_ret is not None:
                 daily_returns_list.append(port_ret)
                 daily_returns_dates.append(dt)
                 self.portfolio.update_capital(port_ret)
+
+            bm_ret = bm_returns.get(dt, np.nan)
+            bm_returns_list.append(bm_ret)
 
             if calculate_ic and prev_dt is not None:
                 if use_external:
@@ -96,6 +113,22 @@ class BacktestEngine:
 
         report = self.evaluator.generate_report(cumulative, returns_series)
 
+        # 基准绩效
+        bm_series = pd.Series(
+            bm_returns_list,
+            index=daily_returns_dates if len(bm_returns_list) == len(daily_returns_dates) else range(len(bm_returns_list)),
+            dtype=float,
+        ).dropna()
+        if not bm_series.empty:
+            bm_cum = (1 + bm_series).cumprod()
+            bm_report = self.evaluator.generate_report(bm_cum, bm_series)
+            report["benchmark_annual_return"] = bm_report["annual_return"]
+            report["benchmark_total_return"] = bm_report["total_return"]
+            report["excess_annual_return"] = (
+                report["annual_return"] - bm_report["annual_return"]
+            )
+            report["benchmark_returns"] = bm_series
+
         if calculate_ic and ic_list:
             ic_series = pd.Series(ic_list, index=ic_dates)
             ic_stats = self.evaluator.calculate_ic_ir(ic_series)
@@ -109,17 +142,45 @@ class BacktestEngine:
 
         return report
 
-    def _generate_signal(self, date: str, factor_name: str, top_n: int) -> List[str]:
-        """用指定日期的收盘数据计算因子值，排序，取 Top N"""
+    def _generate_signal(
+        self,
+        date: str,
+        factor_name: str,
+        top_n: int,
+        apply_preprocessing: bool = True,
+    ) -> List[str]:
+        """用指定日期的收盘数据计算因子值，经过预处理后排序取 Top N"""
         from ..factors.registry import FactorRegistry
-
-        factor_info = FactorRegistry.get(factor_name)
-        if factor_info is None:
-            return []
 
         factor_series = FactorRegistry.compute(factor_name, self.loader, date)
         if factor_series.empty:
             return []
+
+        if apply_preprocessing:
+            from ..preprocessing.pipeline import PreprocessingPipeline
+
+            pipeline = PreprocessingPipeline()
+            industry_series = self.loader.get_industry(date)
+
+            # 尝试从 daily_basic 获取流通市值用于市值中性化
+            barra_df = None
+            daily_df = self.loader.get_daily_data(date)
+            if not daily_df.empty:
+                if "code" not in daily_df.columns and "ts_code" in daily_df.columns:
+                    daily_df["code"] = daily_df["ts_code"]
+                daily_idx = daily_df.set_index("code")
+                for col in ["circ_mv", "total_mv"]:
+                    if col in daily_idx.columns:
+                        barra_df = pd.DataFrame(
+                            {"circ_mv": daily_idx[col].astype(float)}
+                        )
+                        break
+
+            factor_series = pipeline.run_factor_series(
+                factor_series,
+                industry_series=industry_series,
+                barra_df=barra_df,
+            )
 
         return factor_series.dropna().nlargest(top_n).index.tolist()
 
@@ -138,12 +199,11 @@ class BacktestEngine:
         enable_cost: bool,
         rebalance_info: Optional[dict] = None,
     ) -> Optional[float]:
-        """计算组合当日等权益率"""
+        """计算组合当日等权收益率"""
         holdings = self.portfolio.current_holdings
         if not holdings:
             return None
 
-        # 当日涨跌幅 pct_chg
         if "pct_chg" in ret_df.columns:
             ret_col = "pct_chg"
         elif "1vwap_pct" in ret_df.columns:
@@ -155,9 +215,8 @@ class BacktestEngine:
         if holdings_ret.empty:
             return None
 
-        port_ret = holdings_ret[ret_col].astype(float).mean() / 100.0  
+        port_ret = holdings_ret[ret_col].astype(float).mean() / 100.0
 
-        # 扣除调仓成本
         if enable_cost and rebalance_info is not None:
             cost_rate = rebalance_info["total_cost"] / self.portfolio.current_capital
             port_ret -= cost_rate
@@ -170,7 +229,7 @@ class BacktestEngine:
         ret_df: pd.DataFrame,
         factor_name: str,
     ) -> float:
-        """IC = Corr(Factor_{factor_date}, Return from ret_df) """
+        """IC = Corr(Factor_{factor_date}, Return from ret_df)"""
         from ..factors.registry import FactorRegistry
 
         factor_series = FactorRegistry.compute(factor_name, self.loader, factor_date)
@@ -181,8 +240,7 @@ class BacktestEngine:
         if ret_series is None:
             return np.nan
 
-        ic = self.evaluator.calculate_ic(factor_series, ret_series)
-        return ic
+        return self.evaluator.calculate_ic(factor_series, ret_series)
 
     def _calc_ic_from_series(
         self, factor_date: str, ret_df: pd.DataFrame, factor_values: dict
@@ -207,20 +265,25 @@ class BacktestEngine:
         return None
 
     def print_report(self, report: dict) -> None:
-
-        print("回测绩效报告：")
-        print(f"总收益率:       {report['total_return']*100:>10.2f}%")
-        print(f"年化收益率:     {report['annual_return']*100:>10.2f}%")
-        print(f"年化波动率:     {report['annual_volatility']*100:>10.2f}%")
-        print(f"夏普比率:       {report['sharpe_ratio']:>10.2f}")
-        print(f"最大回撤:       {report['max_drawdown']*100:>10.2f}%")
-        print(f"卡玛比率:       {report['calmar_ratio']:>10.2f}")
-        print(f"胜率:           {report['win_rate']*100:>10.2f}%")
+        print("=" * 40)
+        print("回测绩效报告")
+        print("=" * 40)
+        print(f"总收益率:           {report['total_return']*100:>10.2f}%")
+        print(f"年化收益率:         {report['annual_return']*100:>10.2f}%")
+        if "benchmark_annual_return" in report:
+            print(f"基准年化收益率:     {report['benchmark_annual_return']*100:>10.2f}%")
+            print(f"超额年化收益率:     {report['excess_annual_return']*100:>10.2f}%")
+        print(f"年化波动率:         {report['annual_volatility']*100:>10.2f}%")
+        print(f"夏普比率:           {report['sharpe_ratio']:>10.2f}")
+        print(f"最大回撤:           {report['max_drawdown']*100:>10.2f}%")
+        print(f"卡玛比率:           {report['calmar_ratio']:>10.2f}")
+        print(f"胜率:               {report['win_rate']*100:>10.2f}%")
 
         if report.get("ic_mean") is not None:
-            print(f"\nIC 均值:        {report['ic_mean']:>10.4f}")
-            print(f"IC IR:          {report.get('ir', 0):>10.4f}")
-            print(f"IC 胜率:        {report.get('ic_win_rate', 0)*100:>10.2f}%")
+            print(f"\nIC 均值:            {report['ic_mean']:>10.4f}")
+            print(f"IC IR:              {report.get('ir', 0):>10.4f}")
+            print(f"IC 胜率:            {report.get('ic_win_rate', 0)*100:>10.2f}%")
 
-        print(f"\n总交易成本:     {report['total_cost']:>10.0f} 元")
-        print(f"平均换手率:     {report['avg_turnover']*100:>10.2f}%")
+        print(f"\n总交易成本:         {report['total_cost']:>10.0f} 元")
+        print(f"平均换手率:         {report['avg_turnover']*100:>10.2f}%")
+        print("=" * 40)

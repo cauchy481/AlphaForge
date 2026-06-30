@@ -28,7 +28,7 @@ def calc_ic_stats(ic_series: pd.Series) -> dict:
             "ic_win_rate": np.nan, "ic_t": np.nan, "n": 0,
         }
     mean = clean.mean()
-    std = clean.std(ddof=0)
+    std = clean.std(ddof=1)
     ir = mean / std if std > 1e-12 else np.nan
     win_rate = (clean > 0).mean()
     t = mean / (std / np.sqrt(len(clean))) if std > 1e-12 else np.nan

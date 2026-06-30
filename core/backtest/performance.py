@@ -65,7 +65,7 @@ class PerformanceEvaluator:
             return {"ic_mean": np.nan, "ic_std": np.nan, "ir": np.nan, "ic_win_rate": np.nan}
 
         mean = clean.mean()
-        std = clean.std(ddof=0)
+        std = clean.std(ddof=1)
         ir = mean / std if std > 1e-12 else np.nan
         win_rate = (clean > 0).mean()
         return {"ic_mean": mean, "ic_std": std, "ir": ir, "ic_win_rate": win_rate}

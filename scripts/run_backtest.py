@@ -11,7 +11,7 @@ from core.backtest import BacktestEngine
 def main():
     cfg = load_config()
     token = cfg["tushare"]["token"]
-    if token == "YOUR_TUSHARE_TOKEN_HERE":
+    if not token or token == "YOUR_TUSHARE_TOKEN_HERE":
         print("请先在 config/settings.yaml 中填入 Tushare Token")
         return
 
@@ -20,8 +20,21 @@ def main():
         cache_dir=cfg["data"]["cache_dir"],
     )
 
-    print("下载日线数据...")
-    loader.download_daily_batch("20240101", "20241231")
+    start = "20240101"
+    end = "20241231"
+
+    print("下载日线行情数据...")
+    loader.download_daily_batch(start, end)
+
+    print("下载每日基本面指标（PE/PB/市值）...")
+    loader.download_daily_basic(start, end)
+
+    print("下载基准指数日线（沪深300、中证500）...")
+    loader.download_index_daily(
+        index_codes=["000300.SH", "000905.SH"],
+        start_date=start,
+        end_date=end,
+    )
 
     engine = BacktestEngine(
         data_loader=loader,
@@ -40,6 +53,8 @@ def main():
         rebalance_freq=cfg["backtest_strategy"]["rebalance_freq"],
         enable_cost=cfg["backtest_strategy"]["enable_cost"],
         calculate_ic=cfg["backtest_strategy"]["calculate_ic"],
+        benchmark_index="000300.SH",
+        apply_preprocessing=True,
     )
 
     engine.print_report(report)
