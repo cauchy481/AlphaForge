@@ -1,6 +1,6 @@
 
 tushare:
-  token: ""  # your tushare token
+  token: ""  # 请使用 config/settings.local.yaml 或环境变量 TUSHARE_TOKEN 配置
 
 data:
   cache_dir: "./data_cache"           # 本地数据缓存目录

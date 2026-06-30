@@ -7,3 +7,5 @@ data_cache/
 *.csv
 tests/
 examples/*.py
+local_research/
+config/settings.local.yaml
